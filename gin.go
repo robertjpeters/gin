@@ -365,6 +365,14 @@ func (engine *Engine) HandleContext(c *Context) {
 	c.index = oldIndexValue
 }
 
+func (engine *Engine) HandleContextPreserveKeys(c *Context) {
+	oldIndexValue := c.index
+	c.resetPreserveKeys()
+	engine.handleHTTPRequest(c)
+
+	c.index = oldIndexValue
+}
+
 func (engine *Engine) handleHTTPRequest(c *Context) {
 	httpMethod := c.Request.Method
 	rPath := c.Request.URL.Path
