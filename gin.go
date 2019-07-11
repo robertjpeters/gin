@@ -397,7 +397,9 @@ func (engine *Engine) handleHTTPRequest(c *Context) {
 			c.Params = value.params
 			c.fullPath = value.fullPath
 			c.Next()
-			c.writermem.WriteHeaderNow()
+			if c.writermem.ResponseWriter != nil {
+				c.writermem.WriteHeaderNow()
+			}
 			return
 		}
 		if httpMethod != "CONNECT" && rPath != "/" {
@@ -433,7 +435,7 @@ var mimePlain = []string{MIMEPlain}
 func serveError(c *Context, code int, defaultMessage []byte) {
 	c.writermem.status = code
 	c.Next()
-	if c.writermem.Written() {
+	if c.writermem.ResponseWriter == nil || c.writermem.Written() {
 		return
 	}
 	if c.writermem.Status() == code {
