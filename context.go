@@ -874,8 +874,10 @@ func (c *Context) Render(code int, r render.Render) {
 		return
 	}
 
-	if err := r.Render(c.Writer); err != nil {
-		panic(err)
+	if c.Writer != nil {
+		if err := r.Render(c.Writer); err != nil {
+			panic(err)
+		}
 	}
 }
 
