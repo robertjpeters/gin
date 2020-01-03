@@ -676,7 +676,7 @@ func TestContextRenderJSONP(t *testing.T) {
 	c.JSONP(http.StatusCreated, H{"foo": "bar"})
 
 	assert.Equal(t, http.StatusCreated, w.Code)
-	assert.Equal(t, "x({\"foo\":\"bar\"})", w.Body.String())
+	assert.Equal(t, "x({\"foo\":\"bar\"});", w.Body.String())
 	assert.Equal(t, "application/javascript; charset=utf-8", w.Header().Get("Content-Type"))
 }
 
@@ -1797,6 +1797,23 @@ func TestContextRenderDataFromReader(t *testing.T) {
 	assert.Equal(t, contentType, w.Header().Get("Content-Type"))
 	assert.Equal(t, fmt.Sprintf("%d", contentLength), w.Header().Get("Content-Length"))
 	assert.Equal(t, extraHeaders["Content-Disposition"], w.Header().Get("Content-Disposition"))
+}
+
+func TestContextRenderDataFromReaderNoHeaders(t *testing.T) {
+	w := httptest.NewRecorder()
+	c, _ := CreateTestContext(w)
+
+	body := "#!PNG some raw data"
+	reader := strings.NewReader(body)
+	contentLength := int64(len(body))
+	contentType := "image/png"
+
+	c.DataFromReader(http.StatusOK, contentLength, contentType, reader, nil)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, body, w.Body.String())
+	assert.Equal(t, contentType, w.Header().Get("Content-Type"))
+	assert.Equal(t, fmt.Sprintf("%d", contentLength), w.Header().Get("Content-Length"))
 }
 
 type TestResponseRecorder struct {
