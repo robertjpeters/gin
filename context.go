@@ -134,6 +134,24 @@ func (c *Context) Copy() *Context {
 	return &cp
 }
 
+// Copy returns a copy of the current context that can be safely used outside the request's scope.
+// This has to be used when the context has to be passed to a goroutine.
+func (c *Context) CopyPreserveWriter() *Context {
+	var cp = *c
+	cp.writermem.reset(cp.writermem.ResponseWriter)
+	cp.Writer = &cp.writermem
+	cp.index = abortIndex
+	cp.handlers = nil
+	cp.Keys = map[string]interface{}{}
+	for k, v := range c.Keys {
+		cp.Keys[k] = v
+	}
+	paramCopy := make([]Param, len(cp.Params))
+	copy(paramCopy, cp.Params)
+	cp.Params = paramCopy
+	return &cp
+}
+
 // HandlerName returns the main handler's name. For example if the handler is "handleGetUsers()",
 // this function will return "main.handleGetUsers".
 func (c *Context) HandlerName() string {
