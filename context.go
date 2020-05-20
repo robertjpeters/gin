@@ -103,14 +103,16 @@ func (c *Context) resetPreserveKeys() {
 	c.Writer = &c.writermem
 	c.Params = c.Params[0:0]
 	c.handlers = nil
-	c.index = -1
+	//c.index = -1
 
 	c.fullPath = ""
 	c.Errors = c.Errors[0:0]
 	c.Accepted = nil
 	c.queryCache = nil
 	c.formCache = nil
-	*c.params = (*c.params)[0:0]
+
+	cp := *c.params
+	*c.params = (cp)[0:0]
 }
 
 // Copy returns a copy of the current context that can be safely used outside the request's scope.
@@ -144,15 +146,15 @@ func (c *Context) CopyPreserveWriter() *Context {
 	//cp.writermem.reset(responseWriter)
 	cp.writermem.ResponseWriter = nil
 	cp.Writer = &cp.writermem
-	//cp.index = abortIndex
+	cp.index = -1
 	cp.handlers = nil
 	cp.Keys = map[string]interface{}{}
 	for k, v := range c.Keys {
 		cp.Keys[k] = v
 	}
-	paramCopy := make([]Param, len(cp.Params))
-	copy(paramCopy, cp.Params)
-	cp.Params = paramCopy
+	//paramCopy := make([]Param, len(cp.Params))
+	//copy(paramCopy, cp.Params)
+	cp.Params = make([]Param, 0)
 	return &cp
 }
 
