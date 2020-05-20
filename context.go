@@ -104,7 +104,7 @@ func (c *Context) resetPreserveKeys() {
 	c.Params = c.Params[0:0]
 	c.handlers = nil
 	c.index = -1
-	
+
 	c.fullPath = ""
 	c.Errors = c.Errors[0:0]
 	c.Accepted = nil
@@ -140,7 +140,8 @@ func (c *Context) Copy() *Context {
 // This has to be used when the context has to be passed to a goroutine.
 func (c *Context) CopyPreserveWriter() *Context {
 	var cp = *c
-	cp.writermem.reset(cp.writermem.ResponseWriter)
+	//cp.writermem.reset(cp.writermem.ResponseWriter)
+	cp.writermem.ResponseWriter = nil
 	cp.Writer = &cp.writermem
 	cp.index = abortIndex
 	cp.handlers = nil
