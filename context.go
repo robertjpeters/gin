@@ -140,10 +140,11 @@ func (c *Context) Copy() *Context {
 // This has to be used when the context has to be passed to a goroutine.
 func (c *Context) CopyPreserveWriter() *Context {
 	var cp = *c
-	//cp.writermem.reset(cp.writermem.ResponseWriter)
+	//var responseWriter = c.writermem.ResponseWriter
+	//cp.writermem.reset(responseWriter)
 	cp.writermem.ResponseWriter = nil
 	cp.Writer = &cp.writermem
-	cp.index = abortIndex
+	//cp.index = abortIndex
 	cp.handlers = nil
 	cp.Keys = map[string]interface{}{}
 	for k, v := range c.Keys {
