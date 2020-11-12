@@ -125,7 +125,6 @@ func (c *Context) Copy() *Context {
 	cp := Context{
 		writermem: c.writermem,
 		Request:   c.Request,
-		Params:    c.Params,
 		engine:    c.engine,
 	}
 	cp.writermem.ResponseWriter = nil
@@ -145,9 +144,11 @@ func (c *Context) Copy() *Context {
 // Copy returns a copy of the current context that can be safely used outside the request's scope.
 // This has to be used when the context has to be passed to a goroutine.
 func (c *Context) CopyPreserveWriter() *Context {
-	var cp = *c
-	//var responseWriter = c.writermem.ResponseWriter
-	//cp.writermem.reset(responseWriter)
+	cp := Context{
+		writermem: c.writermem,
+		Request:   c.Request,
+		engine:    c.engine,
+	}
 	cp.writermem.ResponseWriter = nil
 	cp.Writer = &cp.writermem
 	cp.index = -1
@@ -156,13 +157,10 @@ func (c *Context) CopyPreserveWriter() *Context {
 	for k, v := range c.Keys {
 		cp.Keys[k] = v
 	}
-	cp.Params = nil
-	if c.params != nil {
-		//cp.params = *cp.params
-		paramCopy := make([]Param, len(*c.params), 10)
-		//copy(paramCopy, *cp.params)
-		*c.params = paramCopy
-	}
+	paramCopy := make([]Param, len(cp.Params), 10)
+	copy(paramCopy, cp.Params)
+	cp.Params = paramCopy
+	cp.params = &cp.Params
 	return &cp
 }
 
