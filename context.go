@@ -104,27 +104,6 @@ func (c *Context) resetPreserveKeys() {
 	if c.Params != nil {
 		c.Params = c.Params[0:0]
 	}
-<<<<<<< HEAD
-	c.handlers = nil
-	//c.index = -1
-	//c.Keys = nil
-	_, ok := c.Keys["response"];
-	if ok {
-		delete(c.Keys, "response");
-	}
-	c.fullPath = ""
-	c.Errors = c.Errors[0:0]
-	c.Accepted = nil
-	c.queryCache = nil
-	c.formCache = nil
-	*c.params = (*c.params)[0:0]
-}
-
-func (c *Context) resetPreserveKeys() {
-	c.Writer = &c.writermem
-	c.Params = c.Params[0:0]
-=======
->>>>>>> 6f969e6 (Friggin context params)
 	c.handlers = nil
 	//c.index = -1
 	//c.Keys = nil
