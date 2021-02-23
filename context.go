@@ -124,7 +124,7 @@ func (c *Context) resetPreserveKeys() {
 	c.Params = c.Params[0:0]
 	c.handlers = nil
 	c.index = -1
-	
+
 	c.fullPath = ""
 	c.Errors = c.Errors[0:0]
 	c.Accepted = nil
