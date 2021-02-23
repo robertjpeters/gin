@@ -392,11 +392,10 @@ func (engine *Engine) HandleContext(c *Context) {
 func (engine *Engine) HandleContextPreserveKeys(c *Context) {
 	//oldIndexValue := c.index
 	//c.index = oldIndexValue
-	oldIndexValue := c.index
 	c.resetPreserveKeys()
 	engine.handleHTTPRequest(c)
 
-	c.index = oldIndexValue
+	//c.index = oldIndexValue
 }
 
 func (engine *Engine) handleHTTPRequest(c *Context) {
