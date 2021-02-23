@@ -123,14 +123,16 @@ func (c *Context) resetPreserveKeys() {
 	c.Writer = &c.writermem
 	c.Params = c.Params[0:0]
 	c.handlers = nil
-	c.index = -1
+	//c.index = -1
 
 	c.fullPath = ""
 	c.Errors = c.Errors[0:0]
 	c.Accepted = nil
 	c.queryCache = nil
 	c.formCache = nil
-	*c.params = (*c.params)[0:0]
+
+	cp := *c.params
+	*c.params = (cp)[0:0]
 }
 
 // Copy returns a copy of the current context that can be safely used outside the request's scope.
