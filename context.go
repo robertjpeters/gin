@@ -119,6 +119,18 @@ func (c *Context) resetPreserveKeys() {
 	*c.params = (*c.params)[0:0]
 }
 
+func (c *Context) resetPreserveKeys() {
+	c.Writer = &c.writermem
+	c.Params = c.Params[0:0]
+	c.handlers = nil
+	c.index = -1
+	c.fullPath = ""
+	c.Errors = c.Errors[0:0]
+	c.Accepted = nil
+	c.queryCache = nil
+	c.formCache = nil
+}
+
 // Copy returns a copy of the current context that can be safely used outside the request's scope.
 // This has to be used when the context has to be passed to a goroutine.
 func (c *Context) Copy() *Context {
